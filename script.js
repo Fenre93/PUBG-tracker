@@ -70,8 +70,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to increase player count
     window.playerUp = function (teamNumber) {
       const teamIndex = teams.findIndex(team => team.teamNumber === teamNumber);
-      if (!teams[teamIndex].eliminated && teams[teamIndex].playersAlive < playersPerTeam) {
+      if (teams[teamIndex].playersAlive < playersPerTeam) {
         teams[teamIndex].playersAlive++;
+        if (teams[teamIndex].playersAlive > 0) {
+            teams[teamIndex].eliminated = false; // Mark the team as not eliminated if a player is added
+        }
         renderTeams();
       }
     }
