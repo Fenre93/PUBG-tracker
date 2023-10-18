@@ -1,30 +1,42 @@
 document.addEventListener('DOMContentLoaded', function () {
-
     const app = document.querySelector('#app .teams');
+    const teamsAliveElement = document.createElement('div');
+    teamsAliveElement.id = 'teamsAlive';
+    document.querySelector('#app').insertBefore(teamsAliveElement, app);
+
     const totalTeams = 16;
     const playersPerTeam = 4;
     let teams = [];
   
-    // Initialize teams with an additional property for player names
+    // Initialize teams
     for (let i = 1; i <= totalTeams; i++) {
       teams.push({
         teamNumber: i,
         teamName: 'Team ' + i,
         playersAlive: playersPerTeam,
-        playerNames: Array(playersPerTeam).fill('') // Initialize with empty strings
+        playerNames: Array(playersPerTeam).fill('').map((_, index) => 'Player ' + (index + 1)),
+        eliminated: false
       });
+    }
+
+    // Function to update the number of teams still alive
+    function updateTeamsAlive() {
+        const teamsAlive = teams.filter(team => !team.eliminated).length;
+        teamsAliveElement.textContent = teamsAlive + ' Teams Alive';
     }
   
     // Function to render teams
     function renderTeams() {
-      app.innerHTML = ''; // Clear the existing HTML 
-      let teamsAlive = 0; // Counter for teams that are still alive
-
+      app.innerHTML = '';
+      updateTeamsAlive();
+  
       teams.forEach(team => {
-        if (team.playersAlive > 0) teamsAlive++; // If team has players alive, increment counter
-        
         const teamDiv = document.createElement('div');
-        teamDiv.className = `team ${team.playersAlive === 0 ? 'eliminated' : ''}`; // Add 'eliminated' class if no players are alive
+        teamDiv.className = 'team';
+        if (team.eliminated) {
+            teamDiv.classList.add('eliminated');
+        }
+
         teamDiv.innerHTML = `
           <input type="text" value="${team.teamName}" onchange="renameTeam(${team.teamNumber}, event)" placeholder="Team name" />
           <h2>${team.teamName}</h2>
@@ -33,24 +45,14 @@ document.addEventListener('DOMContentLoaded', function () {
           <button onclick="playerUp(${team.teamNumber})">Add Player</button>
           <div>
             ${team.playerNames.map((name, index) => `
-              <input type="text" value="${name}" onchange="renamePlayer(${team.teamNumber}, ${index}, event)" placeholder="Player name" />
+              <input type="text" value="${name}" onchange="renamePlayer(${team.teamNumber}, ${index}, event)" placeholder="Player name" style="display: block; margin-top: 5px;" />
             `).join('')}
           </div>
         `;
         app.appendChild(teamDiv);
       });
-
-      // Add teamsAlive to the UI
-      const aliveCountDiv = document.querySelector('#teamsAlive');
-      if (!aliveCountDiv) {
-        const newDiv = document.createElement('div');
-        newDiv.id = 'teamsAlive';
-        document.body.insertBefore(newDiv, app);
-      }
-      document.querySelector('#teamsAlive').textContent = `Teams Alive: ${teamsAlive}`;
     }
   
-    // Call renderTeams to display the initial UI
     renderTeams();
   
     // Function to decrease player count
@@ -58,31 +60,33 @@ document.addEventListener('DOMContentLoaded', function () {
       const teamIndex = teams.findIndex(team => team.teamNumber === teamNumber);
       if (teams[teamIndex].playersAlive > 0) {
         teams[teamIndex].playersAlive--;
-        renderTeams(); // Update the UI
+        if (teams[teamIndex].playersAlive === 0) {
+            teams[teamIndex].eliminated = true;
+        }
+        renderTeams();
       }
     }
   
     // Function to increase player count
     window.playerUp = function (teamNumber) {
       const teamIndex = teams.findIndex(team => team.teamNumber === teamNumber);
-      if (teams[teamIndex].playersAlive < playersPerTeam) { // Assuming there's a max limit per team
+      if (!teams[teamIndex].eliminated && teams[teamIndex].playersAlive < playersPerTeam) {
         teams[teamIndex].playersAlive++;
-        renderTeams(); // Update the UI
+        renderTeams();
       }
     }
   
     // Function to rename a team
     window.renameTeam = function (teamNumber, event) {
       const teamIndex = teams.findIndex(team => team.teamNumber === teamNumber);
-      teams[teamIndex].teamName = event.target.value; // Update the team's name with the new input value
-      renderTeams(); // Update the UI
+      teams[teamIndex].teamName = event.target.value;
+      renderTeams();
     }
 
     // Function to rename a player
     window.renamePlayer = function (teamNumber, playerIndex, event) {
       const teamIndex = teams.findIndex(team => team.teamNumber === teamNumber);
-      teams[teamIndex].playerNames[playerIndex] = event.target.value; // Update the player's name with the new input value
-      // No need to call renderTeams here to avoid full re-render when typing
+      teams[teamIndex].playerNames[playerIndex] = event.target.value;
+      // No need to call renderTeams() here as the player's name is being updated live in the input field
     }
-  
 });
