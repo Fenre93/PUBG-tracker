@@ -6,27 +6,32 @@ body, html {
     justify-content: center;
     align-items: center;
     background-color: #f7f7f7;
-  }
-  
-  #app {
+}
+
+#app {
     text-align: center;
-  }
-  
-  .teams {
+}
+
+.teams {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px; /* Adjust gap between team boxes */
-  }
-  
-  .team {
+}
+
+.team {
     padding: 20px;
     background-color: #dde5ff;
     border: 1px solid #c0c0c0;
     border-radius: 5px;
-  }
-  
-  button {
+}
+
+.team.eliminated {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+button {
     padding: 10px 20px;
     margin-top: 10px;
-  }
+}
