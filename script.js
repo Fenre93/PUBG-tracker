@@ -6,13 +6,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const totalTeams = 16;
     const playersPerTeam = 4;
+
+    // Specify the custom team names
+    const teamNames = [
+        'FUT', 'Formulation', 'BFG', 'Slava', 'WACE', 'STFU', 
+        'Ukjent Mix', 'RR', 'Mad Marines', 'DSG', 'Slowstorm', 
+        'Sami B', 'Klanen', 'Modern Vikings', 'VV', 'AAU'
+    ];
+
     let teams = [];
   
-    // Initialize teams
-    for (let i = 1; i <= totalTeams; i++) {
+    // Initialize teams with custom names
+    for (let i = 0; i < totalTeams; i++) { // Changed to 0-index for array compatibility
       teams.push({
-        teamNumber: i,
-        teamName: 'Team ' + i,
+        teamNumber: i + 1,
+        teamName: teamNames[i], // Assigning from predefined names
         playersAlive: playersPerTeam,
         playerNames: Array(playersPerTeam).fill('').map((_, index) => 'Player ' + (index + 1)),
         eliminated: false
