@@ -2,14 +2,17 @@ body, html {
     height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: #f7f7f7;
 }
 
 #app {
     text-align: center;
+    padding: 20px; /* added padding to ensure content isn't up against the screen edges */
+    box-sizing: border-box; /* to make sure padding doesn't affect overall width */
+}
+
+#teamsAlive {
+    margin-bottom: 20px; /* space between team count and team boxes */
 }
 
 .teams {
@@ -17,13 +20,18 @@ body, html {
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px; /* Adjust gap between team boxes */
+    max-width: 1920px; /* limit maximum width to accommodate typical 1080p resolution */
+    margin: auto; /* center the container */
 }
 
 .team {
-    padding: 20px;
+    box-sizing: border-box; /* include padding and border in total width/height */
+    padding: 10px; /* reduced padding to save space */
+    width: calc(25% - 20px); /* four teams per row - gap */
     background-color: #dde5ff;
     border: 1px solid #c0c0c0;
     border-radius: 5px;
+    margin-bottom: 10px; /* space between rows of teams */
 }
 
 .team.eliminated {
@@ -32,6 +40,14 @@ body, html {
 }
 
 button {
-    padding: 10px 20px;
+    padding: 5px 10px; /* reduced padding to save space */
     margin-top: 10px;
+    display: block; /* make buttons take full width */
+    width: 100%; /* make buttons take full width */
+}
+
+input[type="text"] {
+    margin-bottom: 5px; /* space between input fields */
+    width: calc(100% - 20px); /* full-width inputs, accounting for padding */
+    box-sizing: border-box; /* include padding and border in total width/height */
 }
