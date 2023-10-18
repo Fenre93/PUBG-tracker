@@ -1,0 +1,25 @@
+body, html {
+    height: 100%
+    margin: 0;
+    font-family: Areial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f7f7f7;
+}
+
+#app {
+    text-align: center;
+}
+
+.team {
+    padding: 20px;
+    background-color: #ddeff;
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10 px 20px;
+    margin-top: 10px;
+}
